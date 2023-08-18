@@ -8,23 +8,9 @@ public class Problem12851 {
 	static int e = 0;
 	static final int MAX = 200000;
 	
-	static class Log{
-		int min = 0;
-		int count = 0;
-		
-		Log(int min){
-			this.min = min;
-		}
-		Log(int min, int count){
-			this.min = min;
-			this.count = count;
-		}
-		void cntInc(int count) {
-			this.count += count;
-		}
-	}
+
 	public static void main(String[] args) throws IOException{
-		String answer = "";
+		int count = 0;
 		// input
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String[] sarr = br.readLine().split(" ");
@@ -32,17 +18,15 @@ public class Problem12851 {
 		
 		s = Integer.parseInt(sarr[0]);
 		e = Integer.parseInt(sarr[1]);
-		Log[] map = new Log[200000];
-		
+		int[] map = new int[200000];
+
 		if(s==e) {
-			answer = "0 1";
+			count =1;
 		}
 		else {
 			//solution
 			Queue<Integer> queue = new LinkedList<>();
-			queue.offer(s);
-			map[s] = new Log(0, 1);
-				
+			queue.offer(s);				
 			
 			while(!queue.isEmpty()) {
 				int now = queue.poll();
@@ -62,30 +46,31 @@ public class Problem12851 {
 						next = now-1;
 						break;
 					}
-					if(next>=0 && next<MAX) {
-						Log nowLog = map[now];
-						Log nextLog = map[next];
+					if(next>=0 && next<MAX &&(now!=next)){
 						
-						if(nextLog==null) {
-							nextLog = new Log(nowLog.min+1);
-							nextLog.cntInc(nowLog.count);
-							map[next] = nextLog;
+						if(map[next]==map[now]+1) {
 							queue.offer(next);
-						}
-						else if(nextLog.min == nowLog.min+1) {
-							nextLog.cntInc(nowLog.count);
-							map[next] = nextLog;
-						}
+							if(next == e) {
+								count ++;
+							}}
+						if(map[next]==0) {
+							map[next]=map[now]+1;
+							queue.offer(next);
+							if(next == e) {
+								count ++;
+							}}
 					}
 					
 				}			
 			}
-			answer += map[e].min +" "+map[e].count;		
+
 		}
 				
 		// output 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		bw.append(answer);
+		bw.append(""+map[e]);
+		bw.newLine();
+		bw.append(""+count);
 		bw.flush();
 		bw.close();
 		
