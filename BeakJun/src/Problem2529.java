@@ -1,42 +1,68 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
 
 public class Problem2529 {
+    static String max = "00";
+    static String min = "99";
     public static void main(String[] args) throws IOException {
-
         // input
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int arr[] = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-        br.close();
+        char[] cs = br.readLine().replace(" ", "").toCharArray();
 
+        int[] answer = new int[n+1];
         //test
-        long dp[] = new long[n];
-        dp[0] = arr[0];
-        if(n>1){
-            dp[1] = arr[0] + arr[1];
-        }
-        if(n>2){
-            dp[2] = Math.max(arr[0], arr[1]) + arr[2];
-        }
-
-        //dp[i][0] 은 이전 다리는 건너뛰고 지금 다리를 밟음
-        //dp[i][1] 은 이전 다리를 밟고 지금 다리도 밟음
-        for (int i = 3; i < n; i++) {
-            dp[i] = arr[i] + Math.max(dp[i-2], arr[i-1]+dp[i-3]);
+        for (int i = 0; i < 10; i++) {
+            answer[0] = i;
+            bf(cs, answer, n, 0);
         }
 
         // output
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        bw.append(Long.toString(dp[n-1]));
-        bw.flush();
-        bw.close();
+        System.out.println(max);
+        System.out.println(min);
+
+    }
+    static void bf(char[] chars, int[] answer, int size, int index) {
+        if(size == index){
+            StringBuilder result = new StringBuilder();
+            for(int i = 0; i < size+1; i++){
+                result.append(answer[i]);
+            }
+            String s = result.toString();
+            min = (min.compareTo(s)<0)? min : s;
+            max = max.compareTo(s)>0?max : s;
+            return;
+        }
+        if (chars[index] == '<') {
+            for (int i = answer[index] + 1; i <10; i++) {
+                boolean check = true;
+                for (int j = 0; j <= index; j++) {
+                    if(answer[j] == i){
+                        check = false;
+                        break;
+                    }
+                }
+                if(check){
+                    answer[index+1] = i;
+                    bf(chars, answer, size, index+1);
+                }
+            }
+        }else{
+            for (int i = answer[index] - 1; i >= 0; i--) {
+                boolean check = true;
+                for (int j = 0; j <= index; j++) {
+                    if(answer[j] == i){
+                        check = false;
+                        break;
+                    }
+                }
+                if(check){
+                    answer[index+1] = i;
+                    bf(chars, answer, size, index+1);
+                }
+            }
+        }
+
     }
 
 }
