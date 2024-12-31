@@ -14,29 +14,10 @@ public class Problem10942 {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 1; i < n+1; i++) {
-            int s =i;
-            int e =i;
-            while(s>0 && e<n+1){
-                if(arr[s]==arr[e]){
-                    answer[s][e]=true;
-                    s--;
-                    e++;
-                }else{
-                    break;
-                }
-
-            }
-
-            s = i;
-            e = i+1;
-            while(s>0 && e<n+1){
-                if(arr[s]==arr[e]){
-                    answer[s][e]=true;
-                    s--;
-                    e++;
-                }else{
-                    break;
+        for(int i=1 ; i<=n ;i++) {
+            for(int j=i ; j>0 ; j--) {
+                if(arr[i]==arr[j]) {
+                    if(i-j<2 || answer[j+1][i-1]) answer[j][i]=true;
                 }
             }
         }
