@@ -13,38 +13,55 @@ public class Problem1926 {
             }
         }
 
-        boolean[][] visited = new boolean[r+2][c+2];
-
         //test
+        int answer = 0;
+        int max = 0;
         for (int i = 1; i <= r; i++) {
             for (int j = 1; j <= c; j++) {
-                if (visited[i][j] == true) {
-                    dfs(arr, visited, i, j);
+                if (arr[i][j]==1) {
+                    max = Math.max(max,dfs(arr, i, j));
+                    answer++;
                 }
             }
         }
 
         // output
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        bw.append("");
-        bw.flush();
-        bw.close();
-
+        System.out.println(answer);
+        System.out.println(max);
     }
 
-    static boolean dfs(int[][]arr, boolean[][] visited, int i, int j) {
+    static int dfs(int[][]arr, int i, int j) {
         Queue<int[]> q = new LinkedList<>();
-        visited[i][j] = true;
-        q.add(new int[]{i, j});
+        int result = 1;
 
+        arr[i][j] = 0;
+        q.add(new int[]{i, j});
         while (!q.isEmpty()) {
             int[] cur = q.poll();
-            if(arr[cur[0]+1][cur[1]] == 1 && !visited[cur[0]+1][cur[1]]) {}
-            if(arr[cur[0]-1][cur[1]] == 1 ) {}
-            if(arr[cur[0]][cur[1]+1] == 1){}
-            if(arr[cur[0]][cur[1]-1] == 1){}
+            int x = cur[0];
+            int y = cur[1];
+            if(arr[x+1][y] == 1) {
+                arr[x+1][y] = 0;
+                q.add(new int[]{x+1, y});
+                result++;
+            }
+            if(arr[x-1][y] == 1) {
+                arr[x-1][y] = 0;
+                q.add(new int[]{x-1, y});
+                result++;
+            }
+            if(arr[x][y+1] == 1) {
+                arr[x][y+1] = 0;
+                q.add(new int[]{x, y+1});
+                result++;
+            }
+            if(arr[x][y-1] == 1) {
+                arr[x][y-1] = 0;
+                q.add(new int[]{x, y-1});
+                result++;
+            }
         }
-        return true;
+        return result;
     }
     static int readInt() throws IOException {
 
