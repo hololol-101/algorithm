@@ -3,34 +3,37 @@ import java.io.*;
 public class Problem15989 {
     public static void main(String[] args) throws IOException {
         // input
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int[] arr=new int[n];
-        int max=0;
-        for(int i = 0; i < n; i++) {
-            arr[i]=Integer.parseInt(br.readLine());
-            max=Math.max(max,arr[i]);
+        int n = readInt();
+        int[]arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = readInt();
         }
 
-        int[]dp = new int[max+1];
-        for(int i = 1; i <=max; i++) {
-            dp[i] = dp[i - 1] + 1;
-            if (i > 5) {
-                if (i % 2 == 0 || i % 3 == 0) {
-                    dp[i] += 1;
-                }
-
-            }
+        for(int i=0; i<n; i++){
+            System.out.println(collaborator(0, arr[i], 0));
         }
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        for(int i = 0; i < n; i++) {
-            bw.write(dp[arr[i]]+"\n");
-        }
-        bw.flush();
-        bw.close();
 
     }
+    static int collaborator(int sum, int n, int value){
+        int ans = 0;
+        if(n==sum){
+            return 1;
+        }else if(sum > n){
+            return 0;
+        }
+        if(value == 3 || value == 0){
+            ans += collaborator(sum + 3, n, 3);
+            ans += collaborator(sum + 2, n, 2);
+            ans += collaborator(sum + 1, n, 1);
+        }else if (value == 2){
+            ans += collaborator(sum + 2, n, 2);
+            ans += collaborator(sum + 1, n, 1);
+        }else if (value == 1){
+            return 1;
+        }
 
+        return ans;
+    }
     static int readInt() throws IOException {
 
         int c, n = System.in.read() & 15;
