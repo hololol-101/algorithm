@@ -4,36 +4,41 @@ public class Problem15989 {
     public static void main(String[] args) throws IOException {
         // input
         int n = readInt();
-        int[]arr = new int[n];
+        int[] arr = new int[10001];
+        int[][]dp = new int[10001][4];
+
+
+
         for (int i = 0; i < n; i++) {
             arr[i] = readInt();
         }
-
-        for(int i=0; i<n; i++){
-            System.out.println(collaborator(0, arr[i], 0));
+        setDp(dp);
+        for (int i = 0; i < n; i++) {
+            System.out.println(dp[arr[i]][0]);
         }
 
     }
-    static int collaborator(int sum, int n, int value){
-        int ans = 0;
-        if(n==sum){
-            return 1;
-        }else if(sum > n){
-            return 0;
-        }
-        if(value == 3 || value == 0){
-            ans += collaborator(sum + 3, n, 3);
-            ans += collaborator(sum + 2, n, 2);
-            ans += collaborator(sum + 1, n, 1);
-        }else if (value == 2){
-            ans += collaborator(sum + 2, n, 2);
-            ans += collaborator(sum + 1, n, 1);
-        }else if (value == 1){
-            return 1;
+
+    static void setDp(int[][] arr) {
+        arr[1][0] = 1;
+        arr[1][1] = 1;
+        arr[2][0] = 2;
+        arr[2][1] = arr[1][1];
+        arr[2][2] = 1;
+        arr[3][0] = 3;
+        arr[3][1] = arr[2][1];
+        arr[3][2] = arr[1][1]+arr[1][2];
+        arr[3][3] = 1;
+
+        for (int i = 4; i < arr.length; i++) {
+            arr[i][1] = arr[i - 1][1];
+            arr[i][2] = arr[i - 2][1] + arr[i - 2][2];
+            arr[i][3] = arr[i - 3][1] + arr[i - 3][2] + arr[i - 3][3];
+            arr[i][0] = arr[i][1] + arr[i][2] + arr[i][3];
         }
 
-        return ans;
     }
+
     static int readInt() throws IOException {
 
         int c, n = System.in.read() & 15;
